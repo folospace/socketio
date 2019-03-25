@@ -7,7 +7,7 @@ return [
         'token' => env('APP_KEY', 'forwarding_token'),
         'config' => [
             'dispatch_mode' => 2,
-            'worker_num' => 4,
+            'worker_num' => 4,                  //single server workers number
             'heartbeat_check_interval' => 10,   //10 seconds
             'heartbeat_idle_time' => 20,        //20 seconds
         ],

@@ -5,6 +5,10 @@ namespace Folospace\Socketio;
 use Folospace\Socketio\Foundation\SocketioParser;
 use Folospace\Socketio\Foundation\SocketioCacher;
 
+/**
+ * Class Socketio
+ * @package Folospace\Socketio
+ */
 class Socketio
 {
     public $forwardingToken;
@@ -96,11 +100,26 @@ class Socketio
     }
 
 
+    /**
+     * login user
+     * @param $socketId
+     * @param $userId
+     * @return bool
+     */
     public function login($socketId, $userId)
     {
         return SocketioCacher::getInstance()->login($socketId, $userId, $this->node);
     }
 
+    /**
+     * logout user
+     * @param $userId
+     * @return bool
+     */
+    public function logout($userId)
+    {
+        return SocketioCacher::getInstance()->logoutByUserId($userId);
+    }
 
     public function registerCustomEvent()
     {
