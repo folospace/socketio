@@ -67,18 +67,21 @@ class Socketio
             $this->onLogout($socket->id);
         });
 
+        SocketioParser::getInstance()->on('test', function ($socket, $data) {
+            $socket->emit('test', 'hello there');
+        });
+
         SocketIOParser::getInstance()->on('login', function ($socket, $data)
         {
             $userId = $data['token']; //parse userId from client token
             if ($userId) {
-
                 if ($client = SocketioCacher::getInstance()->getClientByStaffId($userId)) {
                     $this->emitToClient($client, 'logout', 'old client should logout');
                 }
 
                 $this->login($socket->id, $userId);
 
-                $socket->emit('web_login', [
+                $socket->emit('login', [
                     'error_code' => 0,
                     'msg' => 'login success',
                 ]);

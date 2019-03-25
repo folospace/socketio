@@ -5,7 +5,12 @@ return [
         'host' => '0.0.0.0',
         'port' => 3001,
         'token' => env('APP_KEY', 'forwarding_token'),
-        'config' => [],
+        'config' => [
+            'dispatch_mode' => 2,
+            'worker_num' => 4,
+            'heartbeat_check_interval' => 10,   //10 seconds
+            'heartbeat_idle_time' => 20,        //20 seconds
+        ],
     ],
 
     'protocol' => [
