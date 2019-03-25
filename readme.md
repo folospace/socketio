@@ -95,6 +95,12 @@ Route::get('/', function () {
     dd($ret);
 });
 
+```
+
+## Publish and modify config
+
+``` bash
+$ php artisan vendor:publish --provider="Folospace\Socketio\SocketioServiceProvider"
 
 ```
 
