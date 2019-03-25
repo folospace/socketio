@@ -76,7 +76,7 @@ class Socketio
                     $this->emitToClient($client, 'logout', 'old client should logout');
                 }
 
-                SocketioCacher::getInstance()->login($socket->id, $userId, $this->node);
+                $this->login($socket->id, $userId);
 
                 $socket->emit('web_login', [
                     'error_code' => 0,
@@ -90,6 +90,12 @@ class Socketio
                 $socket->disconnect();
             }
         });
+    }
+
+
+    public function login($socketId, $userId)
+    {
+        return SocketioCacher::getInstance()->login($socketId, $userId, $this->node);
     }
 
 
@@ -108,6 +114,16 @@ class Socketio
     public function getClientByUserId($userId)
     {
         return SocketioCacher::getInstance()->getClientByUserId($userId);
+    }
+
+    /**
+     * get user id
+     * @param $socketId
+     * @return string
+     */
+    public function getUserIdByClient($socketId)
+    {
+        return SocketioCacher::getInstance()->getUserIdByClient($socketId, $this->node);
     }
 
     /**

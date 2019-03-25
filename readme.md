@@ -3,9 +3,10 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Build Status][ico-travis]][link-travis]
-[![StyleCI][ico-styleci]][link-styleci]
 
-This is where your description should go. Take a look at [contributing.md](contributing.md) to see a to do list.
+<p>A simple socketio server for Laravel.</p>
+<p>Require php package <a href='https://github.com/nrk/predis'><i>predis</i></a>. </p>
+<p>Require php extension <a href='https://github.com/swoole/swoole-src'><i>swoole</i></a>.</p>
 
 ## Installation
 
@@ -16,16 +17,90 @@ $ composer require folospace/socketio
 ```
 
 ## Usage
+### server commands
+``` bash
+$ php artisan socketio start        //start server
+$ php artisan socketio start --d    //start server daemonize
+$ php artisan socketio stop         //stop server
+$ php artisan socketio status       //server status
+```
+### register events
+``` bash
+namespace App\Providers;
+
+use Folospace\Socketio\Facades\Socketio;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        if (php_sapi_name() == 'cli') {
+            Socketio::on('connection', function ($socket, $request) {
+                print_r($request);
+                echo 'connection:'.$socket->id.PHP_EOL;
+            });
+
+            Socketio::on('disconnect', function ($socket) {
+                echo 'disconnect:'.$socket->id.PHP_EOL;
+                //$this->onLogout($socket->id);
+            });
+            
+            Socketio::on('login', function ($socket, $data) {
+                $userId = $data['token']; //parse user id from client token
+                if ($userId) {
+                    //Socketio::login($socket->id, $userId);
+                    $socket->emit('login', ['error_code' => 0, 'message' => 'login success']);
+                } else {
+                    $socket->emit('login', ['error_code' => 1, 'message' => 'invalid token']);
+                }
+            });
+            
+            Socketio::on('test', function ($socket, $data) {
+                $socket->emit('test', 'hello there');
+            });
+            
+            Socketio::on('private_event_with_ack', function ($socket, $data, $ack) {
+                if (Socketio::getUserIdByClient($socket->id)) {
+                    //do sth after login.
+                    if ($ack) {
+                        $ack('done');
+                    }
+                } else {
+                    //disconnect guest.
+                    $socket->disconnect();
+                }
+            });
+        }
+    }
+}
+```
+
+### Test
+``` bash
+
+use Folospace\Socketio\Facades\Socketio;
+
+//after socket login, send data to user from anywhere
+Socketio::emitToUser($userId, 'test', ['message' => 'I am server']);
+
+//after server start, connect to local server
+Route::get('/', function () {
+    $client = new \Folospace\Socketio\Foundation\SocketioClient('127.0.0.1', 3001);
+
+    $client->emit('test', 'hello');
+    //sleep(3);
+    $ret = $client->receive();
+
+    dd($ret);
+});
+
+
+```
 
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.
-
-## Testing
-
-``` bash
-$ composer test
-```
 
 ## Contributing
 
