@@ -1,0 +1,44 @@
+{
+    "name": "folospace/socketio",
+    "description": ":description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "magacy",
+            "email": "folospace@gmail.com",
+            "homepage": "author homepage"
+        }
+    ],
+    "homepage": "https://github.com/folospace/socketio",
+    "keywords": ["Laravel", "Socketio"],
+    "require": {
+        "illuminate/support": "~5",
+        "predis/predis": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Folospace\\Socketio\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Folospace\\Socketio\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Folospace\\Socketio\\SocketioServiceProvider"
+            ],
+            "aliases": {
+                "Socketio": "Folospace\\Socketio\\Facades\\Socketio"
+            }
+        }
+    }
+}
