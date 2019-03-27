@@ -34,12 +34,12 @@ class Socketio
     /**
      * @param $server
      * @param $node
-     * @param bool $damon
+     * @param bool $daemon
      */
-    public function onEngineStart($server, $node, $damon = false)
+    public function onEngineStart($server, $node, $daemon = false)
     {
         $this->node = $node;
-        $this->debug = !$damon;
+        $this->debug = !$daemon;
 
         $this->registerBaseEvent();
         $this->registerCustomEvent();

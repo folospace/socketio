@@ -59,12 +59,12 @@ class Socketio extends Command
 
         $port = config('socketio.server.port', '3001');
         $engine = new \swoole_websocket_server('0.0.0.0', $port);
-        $damon = intval($this->option('d'));
+        $daemonize = intval($this->option('d'));
 
-        Server::onEngineStart($engine, $this->host . ':' . $port, $damon);
+        Server::onEngineStart($engine, $this->host . ':' . $port, $daemonize);
 
         $config = config('socketio.server.config');
-        $config['daemonize'] = $damon;
+        $config['daemonize'] = $daemonize;
         $engine->set($config);
 
         $this->info('server start');
